@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,23 +27,34 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void update(StudentDto student) {
-
+    public void updateStudent(StudentDto student) {
+        StudentEntity entity = modelMapper.map(student, StudentEntity.class);
+        studentRepository.save(entity);
+        
     }
 
     @Override
-    public void delete(StudentDto student) {
-
+    public void deleteStudent(StudentDto student) {
+        Integer id = 0;
+        studentRepository.deleteById(id);
     }
-
+    
     @Override
     public StudentDto searchById(StudentDto student) {
-        return null;
+        Integer id = 0;
+        StudentEntity studentEntity = studentRepository.findById(id).get();
+        StudentDto studentDto = modelMapper.map(studentEntity, StudentDto.class);
+        return studentDto;
     }
 
     @Override
     public List<StudentDto> getAll() {
-        return List.of();
+        List<StudentEntity> studentEntities = studentRepository.findAll();
+        ArrayList<StudentDto> studentDtoArrayList = new ArrayList<>();
+        studentEntities.forEach(studentEntity ->{
+            StudentDto studentDto = modelMapper.map(studentEntity, StudentDto.class);
+            studentDtoArrayList.add(studentDto);
+        });
     }
 
     @Override
